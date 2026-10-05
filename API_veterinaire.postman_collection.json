@@ -1,0 +1,2299 @@
+{
+	"info": {
+		"_postman_id": "5a91bd8e-eee3-4af7-b0eb-d0c2225cc169",
+		"name": "API_veterinaire",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40540973"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Wrong login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The status code should be 404\", () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"bob@example.be\",\r\n  \"password\": \"wrongPassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/user/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The status code should be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The response should have a JWT token\", () => {\r",
+									"    pm.response.to.be.string;\r",
+									"    pm.expect(pm.response.text().split('.').length).to.be.equal(3);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"bob@example.be\",\r\n  \"password\": \"mdpBob123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/user/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const atob = require('atob');\r",
+									"\r",
+									"pm.test(\"The JWT should contain status: admin\", () => {\r",
+									"    const text = pm.response.text();\r",
+									"    const payload_string = atob(text.split(\".\")[1]); \r",
+									"    const payload_objet = JSON.parse(payload_string);\r",
+									"    pm.expect(payload_objet.status).to.be.equal(\"admin\");\r",
+									"    pm.collectionVariables.set(\"jwt_token_admin\", text.split('\"')[0]);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"aude.c@example.be\",\r\n  \"password\": \"mdpAude123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/user/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login non-admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const atob = require('atob');\r",
+									"\r",
+									"pm.test(\"The JWT should contain status: nonadmin\", () => {\r",
+									"    const text = pm.response.text();\r",
+									"    const payload_string = atob(text.split(\".\")[1]); \r",
+									"    const payload_objet = JSON.parse(payload_string);\r",
+									"    pm.expect(payload_objet.status).to.be.equal(\"nonadmin\"); \r",
+									"    pm.collectionVariables.set(\"jwt_token_nonadmin\", text.split('\"')[0]);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"bob@example.be\",\r\n  \"password\": \"mdpBob123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/user/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AnimalCategory",
+			"item": [
+				{
+					"name": "Get count",
+					"item": [
+						{
+							"name": "Ok (200)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"The number of animal's category should be equal 12\", () => {\r",
+											"    const animalCategory_count = {\r",
+											"        count: 12\r",
+											"    };\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.eql(animalCategory_count);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/count",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"count"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get by id",
+					"item": [
+						{
+							"name": "Ok (200)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"AnimalCategory Amphibien should be correctly returned\", () => {\r",
+											"    const animalCategory_amphibien = {\r",
+											"        label_fr: \"Amphibien\",\r",
+											"        label_en: \"Amphibian\",\r",
+											"        description_fr: \"Grenouilles, Axolotls.\",\r",
+											"        description_en: \"Frogs, Axolotls.\"\r",
+											"    };\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.eql(animalCategory_amphibien);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_nonadmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/Amphibien",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"Amphibien"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not found (404)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", () => {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_nonadmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/Bovin",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"Bovin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not valid (400)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", () => {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"animalcategory not valid\", () => {\r",
+											"    const animalCategory_error = [\r",
+											"        {\r",
+											"        message: \"The id field must contain only letters\",\r",
+											"        rule: \"alpha\",\r",
+											"        field: \"id\"\r",
+											"        }\r",
+											"    ];\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.eql(animalCategory_error);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_nonadmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No jwt (401)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", () => {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response should be: No jwt\", () => {\r",
+											"    pm.response.to.be.string;\r",
+											"    pm.expect(pm.response.text()).to.be.equal(\"No jwt\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/Amphibien",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"Amphibien"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add",
+					"item": [
+						{
+							"name": "Added (201)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"label_fr\": \"Bovin\",\r\n  \"label_en\": \"Bovine\",\r\n  \"description_fr\": \"Vache, taureau\",\r\n  \"description_en\": \"Cow, bull\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not an admin (403)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", () => {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response should be: must be an admin\", () => {\r",
+											"    pm.response.to.be.string;\r",
+											"    pm.expect(pm.response.text()).to.be.equal(\"must be an admin\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_nonadmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"label_fr\": \"Insecte\",\r\n  \"label_en\": \"Insect\",\r\n  \"description_fr\": \"Abeilles, scarabé,...\",\r\n  \"description_en\": \"Bees, beetles,...\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No jwt (401)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", () => {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response should be: No jwt\", () => {\r",
+											"    pm.response.to.be.string;\r",
+											"    pm.expect(pm.response.text()).to.be.equal(\"No jwt\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"label_fr\": \"Insecte\",\r\n  \"label_en\": \"Insect\",\r\n  \"description_fr\": \"Abeilles, scarabé,...\",\r\n  \"description_en\": \"Bees, beetles,...\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not valid (400)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", () => {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"label_en and label_fr not valid\", () => {\r",
+											"    const animalCategory_error = [\r",
+											"        {\r",
+											"            message: \"The label_fr field must contain only letters\",\r",
+											"            rule: \"alpha\",\r",
+											"            field: \"label_fr\"\r",
+											"        },\r",
+											"        {\r",
+											"            message: \"The label_en field must contain only letters\",\r",
+											"            rule: \"alpha\",\r",
+											"            field: \"label_en\"\r",
+											"        }\r",
+											"    ];\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.eql(animalCategory_error);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"label_fr\": \"Insecte123\",\r\n  \"label_en\": \"Insect123\",\r\n  \"description_fr\": \"Abeilles, scarabé,...\",\r\n  \"description_en\": \"Bees, beetles,...\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"item": [
+						{
+							"name": "Delete new AnimalCategory (204)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/Bovin",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"Bovin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not an admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", () => {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response should be: must be an admin\", () => {\r",
+											"    pm.response.to.be.string;\r",
+											"    pm.expect(pm.response.text()).to.be.equal(\"must be an admin\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_nonadmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/Amphibien",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"Amphibien"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not valid (400)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", () => {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"animalcategory not valid\", () => {\r",
+											"    const animalCategory_error = [\r",
+											"        {\r",
+											"        message: \"The id field must contain only letters\",\r",
+											"        rule: \"alpha\",\r",
+											"        field: \"id\"\r",
+											"        }\r",
+											"    ];\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.eql(animalCategory_error);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No jwt (401)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", () => {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response should be: No jwt\", () => {\r",
+											"    pm.response.to.be.string;\r",
+											"    pm.expect(pm.response.text()).to.be.equal(\"No jwt\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory/Amphibien",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory",
+										"Amphibien"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update",
+					"item": [
+						{
+							"name": "Updated (204)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label_fr\": \"animaux domestiques habituels\",\r\n    \"description_fr\": \"Chiens (de toute taille) et chats.\",\r\n    \"description_en\": \"Dogs (of any size) and cats.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not an admin (403)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", () => {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response should be: must be an admin\", () => {\r",
+											"    pm.response.to.be.string;\r",
+											"    pm.expect(pm.response.text()).to.be.equal(\"must be an admin\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_nonadmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label_fr\": \"animaux domestiques habituels\",\r\n    \"description_fr\": \"Chiens (de toute taille...) et chats.\",\r\n    \"description_en\": \"Dogs (of any size....) and cats.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No jwt (401)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", () => {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response should be: No jwt\", () => {\r",
+											"    pm.response.to.be.string;\r",
+											"    pm.expect(pm.response.text()).to.be.equal(\"No jwt\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label_fr\": \"animaux domestiques habituels\",\r\n    \"description_fr\": \"Chiens (de toute taille...) et chats.\",\r\n    \"description_en\": \"Dogs (of any size....) and cats.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/animalcategory",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"animalcategory"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Availability",
+			"item": [
+				{
+					"name": "Get all by page",
+					"item": [
+						{
+							"name": "Ok (200)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Availabilities should be correctly returned\", () => {\r",
+											"    const availabilities = [\r",
+											"        {\r",
+											"            veterinarian_id: 1,\r",
+											"            oncall_id: 1,\r",
+											"            remark: null\r",
+											"        },\r",
+											"        {\r",
+											"            veterinarian_id: 1,\r",
+											"            oncall_id: 6,\r",
+											"            remark: null\r",
+											"        },\r",
+											"        {\r",
+											"            veterinarian_id: 1,\r",
+											"            oncall_id: 7,\r",
+											"            remark: null\r",
+											"        },\r",
+											"        {\r",
+											"            veterinarian_id: 1,\r",
+											"            oncall_id: 12,\r",
+											"            remark: null\r",
+											"        },\r",
+											"        {\r",
+											"            veterinarian_id: 1,\r",
+											"            oncall_id: 17,\r",
+											"            remark: null\r",
+											"        }\r",
+											"    ];\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.eql(availabilities);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_nonadmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/availability/all/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"availability",
+										"all",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No valid (400)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", () => {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"param pagenb not valid\", () => {\r",
+											"    const animalCategory_error = [\r",
+											"        {\r",
+											"        message: \"The pagenb field must be a number\",\r",
+											"        rule: \"number\",\r",
+											"        field: \"pagenb\"\r",
+											"        }\r",
+											"    ];\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.eql(animalCategory_error);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_nonadmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/availability/all/a",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"availability",
+										"all",
+										"a"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"item": [
+						{
+							"name": "Deleted (200)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/availability/1/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"availability",
+										"1",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not valid (400)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", () => {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"idvete and idoncall not valid\", () => {\r",
+											"    const availability_error = [\r",
+											"        {\r",
+											"            message: \"The idvete field must be a number\",\r",
+											"            rule: \"number\",\r",
+											"            field: \"idvete\"\r",
+											"        },\r",
+											"        {\r",
+											"            message: \"The idoncall field must be a number\",\r",
+											"            rule: \"number\",\r",
+											"            field: \"idoncall\"\r",
+											"        }\r",
+											"    ];\r",
+											"    const response = pm.response.json();\r",
+											"    pm.expect(response).to.be.eql(availability_error);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept-version",
+										"value": "1.0.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/availability/a/a",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"availability",
+										"a",
+										"a"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Veterinarian",
+			"item": [
+				{
+					"name": "Get veterinarian with care",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Veterinarian 1 should be correctly returned\", () => {\r",
+									"    const veterinarian_1 = {\r",
+									"        id: 1,\r",
+									"        lastname: \"Dupont\",\r",
+									"        firstname: \"Marie\",\r",
+									"        makehomevisits: false,\r",
+									"        gsm: \"0485423456\",\r",
+									"        streetclinic: \"Rue de l Ange\",\r",
+									"        numberclinic: \"12\",\r",
+									"        localityclinic: \"Namur\",\r",
+									"        gpscoordinate: \"50.4675,4.8709\",\r",
+									"        schedule_fr: \"Lundi-Vendredi : 9h-18h\",\r",
+									"        schedule_en: \"Monday-Friday: 9am-6pm\",\r",
+									"        website: \"http://vetdupont.be\",\r",
+									"        care: [\r",
+									"            {\r",
+									"                animalcategory: \"animaux domestiques habituels\",\r",
+									"                veterinarian_id: 1,\r",
+									"                remark: null\r",
+									"            },\r",
+									"            {\r",
+									"                animalcategory: \"autre Canidé\",\r",
+									"                veterinarian_id: 1,\r",
+									"                remark: null\r",
+									"            },\r",
+									"            {\r",
+									"                animalcategory: \"Amphibien\",\r",
+									"                veterinarian_id: 1,\r",
+									"                remark: null\r",
+									"            }\r",
+									"        ]\r",
+									"    }\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.eql(veterinarian_1);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_nonadmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/veterinarian/withcare/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"veterinarian",
+								"withcare",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update veterinarian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"lastname\": \"Dupond\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/veterinarian",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"veterinarian"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get updated veterinarian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Veterinarian 1 should be correctly returned\", () => {\r",
+									"    const veterinarian_1 = {\r",
+									"        id: 1,\r",
+									"        lastname: \"Dupond\",\r",
+									"        firstname: \"Marie\",\r",
+									"        makehomevisits: false,\r",
+									"        gsm: \"0485423456\",\r",
+									"        streetclinic: \"Rue de l Ange\",\r",
+									"        numberclinic: \"12\",\r",
+									"        localityclinic: \"Namur\",\r",
+									"        gpscoordinate: \"50.4675,4.8709\",\r",
+									"        schedule_fr: \"Lundi-Vendredi : 9h-18h\",\r",
+									"        schedule_en: \"Monday-Friday: 9am-6pm\",\r",
+									"        website: \"http://vetdupont.be\",\r",
+									"        care: [\r",
+									"            {\r",
+									"                animalcategory: \"animaux domestiques habituels\",\r",
+									"                veterinarian_id: 1,\r",
+									"                remark: null\r",
+									"            },\r",
+									"            {\r",
+									"                animalcategory: \"autre Canidé\",\r",
+									"                veterinarian_id: 1,\r",
+									"                remark: null\r",
+									"            },\r",
+									"            {\r",
+									"                animalcategory: \"Amphibien\",\r",
+									"                veterinarian_id: 1,\r",
+									"                remark: null\r",
+									"            }\r",
+									"        ]\r",
+									"    }\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.eql(veterinarian_1);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_nonadmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/veterinarian/withcare/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"veterinarian",
+								"withcare",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add veterinarian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lastname\": \"Smith\",\r\n    \"firstname\": \"Jonh\",\r\n    \"makehomevisits\": false,\r\n    \"gsm\": \"0481113456\",\r\n    \"streetclinic\": \"Rue de l Ange\",\r\n    \"numberclinic\": \"8\",\r\n    \"localityclinic\": \"Namur\",\r\n    \"gpscoordinate\": \"50.4676,4.8709\",\r\n    \"schedule_fr\": \"Lundi-Vendredi : 9h-18h\",\r\n    \"schedule_en\": \"Monday-Friday: 9am-6pm\",\r\n    \"website\": \"http://vetSmith.be\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/veterinarian",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"veterinarian"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get new veterinarian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Veterinarian 23 should be correctly returned\", () => {\r",
+									"    const veterinarian_23 = {\r",
+									"        id: 23,\r",
+									"        lastname: \"Smith\",\r",
+									"        firstname: \"Jonh\",\r",
+									"        makehomevisits: false,\r",
+									"        gsm: \"0481113456\",\r",
+									"        streetclinic: \"Rue de l Ange\",\r",
+									"        numberclinic: \"8\",\r",
+									"        localityclinic: \"Namur\",\r",
+									"        gpscoordinate: \"50.4676,4.8709\",\r",
+									"        schedule_fr: \"Lundi-Vendredi : 9h-18h\",\r",
+									"        schedule_en: \"Monday-Friday: 9am-6pm\",\r",
+									"        website: \"http://vetSmith.be\",\r",
+									"        care: []\r",
+									"    }\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.eql(veterinarian_23);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/veterinarian/withcare/23",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"veterinarian",
+								"withcare",
+								"23"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete new veterinarian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/veterinarian/23",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"veterinarian",
+								"23"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get deleted veterinarian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/veterinarian/withcare/23",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"veterinarian",
+								"withcare",
+								"23"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Care",
+			"item": [
+				{
+					"name": "Get count",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The number of care should be equal 41\", () => {\r",
+									"    const care_count = {\r",
+									"        count: 41\r",
+									"    };\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.eql(care_count);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/care/count",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"care",
+								"count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add care to veterinarian_1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"animalcategory\": \"Poisson\",\r\n    \"veterinarian_id\": 1,\r\n    \"remark\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/care",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"care"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get care veterinarian_1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Care of veterinarian_1 should be correctly returned\", () => {\r",
+									"    const cares = [\r",
+									"        {\r",
+									"            animalcategory: \"animaux domestiques habituels\",\r",
+									"            veterinarian_id: 1,\r",
+									"            remark: null\r",
+									"        },\r",
+									"        {\r",
+									"            animalcategory: \"autre Canidé\",\r",
+									"            veterinarian_id: 1,\r",
+									"            remark: null\r",
+									"        },\r",
+									"        {\r",
+									"            animalcategory: \"Amphibien\",\r",
+									"            veterinarian_id: 1,\r",
+									"            remark: null\r",
+									"        },\r",
+									"        {\r",
+									"            animalcategory: \"Poisson\",\r",
+									"            veterinarian_id: 1,\r",
+									"            remark: null\r",
+									"        }\r",
+									"    ];\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.eql(cares);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/care/veterinarian/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"care",
+								"veterinarian",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get new count",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The number of care should be equal 42\", () => {\r",
+									"    const care_count = {\r",
+									"        count: 42\r",
+									"    };\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.eql(care_count);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/care/count",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"care",
+								"count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete new care",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/care/1/Poisson",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"care",
+								"1",
+								"Poisson"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get care veterinarian_1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Care of veterinarian_1 should be correctly returned\", () => {\r",
+									"    const cares = [\r",
+									"        {\r",
+									"            animalcategory: \"animaux domestiques habituels\",\r",
+									"            veterinarian_id: 1,\r",
+									"            remark: null\r",
+									"        },\r",
+									"        {\r",
+									"            animalcategory: \"autre Canidé\",\r",
+									"            veterinarian_id: 1,\r",
+									"            remark: null\r",
+									"        },\r",
+									"        {\r",
+									"            animalcategory: \"Amphibien\",\r",
+									"            veterinarian_id: 1,\r",
+									"            remark: null\r",
+									"        }\r",
+									"    ];\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.eql(cares);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-version",
+								"value": "1.0.0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}:{{port}}/api/care/veterinarian/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"care",
+								"veterinarian",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt_token_nonadmin",
+			"value": ""
+		},
+		{
+			"key": "jwt_token_admin",
+			"value": ""
+		},
+		{
+			"key": "base_url",
+			"value": "localhost",
+			"type": "default"
+		},
+		{
+			"key": "port",
+			"value": "3002",
+			"type": "default"
+		}
+	]
+}

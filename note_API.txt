@@ -1,0 +1,24 @@
+Pour démarrer l'API:
+
+	docker run --name projetvet -e POSTGRES_PASSWORD=PassVetProximite -e POSTGRES_USER=VetProximite -e 	POSTGRES_DB=DBVetProximite -p 5432:5432 --rm -d postgres
+
+	npm run initDB
+	npm run dev
+
+
+Paquet installé dans l'API :
+•	npm init -y
+•	npm pkg set type=module
+•	npm i express 
+•	npm i -D nodemon
+•	npm pkg set scripts.dev=«nodemon server.js »
+•	npm i pg 
+•	npm i express-promise-router
+•	npm i dotenv 
+•	npm i -D prisma (npx prisma init / npx prisma db pull/ npx prisma generate) 
+- npm i @vinejs/vine
+- npm i argon2
+- npm i jsonwebtoken
+- npm i express-routes-versioning
+- npm i --save-dev swagger-jsdoc (npm pkg set scripts.genDoc="node ./swagger/swagger_jsdoc.js")
+- npm install cors

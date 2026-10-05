@@ -1,0 +1,17 @@
+
+Pour démarrer le BackOffice, voici les commandes à exécuter :
+
+npm install
+
+npm install antd
+
+npm install axios
+
+npm install react-router-dom
+
+npm install jwt-decode
+
+npm i axios-retry
+
+npm run dev
+

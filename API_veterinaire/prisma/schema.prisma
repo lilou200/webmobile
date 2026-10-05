@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  email     String      @id @db.VarChar(255)
+  username  String      @db.VarChar(255)
+  password  String      @db.VarChar(255)
+  isadmin   Boolean     @default(false)
+  belonging belonging[]
+}
+
+model animalcategory {
+  label_fr                                           String      @id @db.VarChar(30)
+  label_en                                           String      @db.VarChar(30)
+  description_fr                                     String      @db.VarChar(500)
+  description_en                                     String      @db.VarChar(500)
+  belonging_belonging_animalcategoryToanimalcategory belonging[] @relation("belonging_animalcategoryToanimalcategory")
+  care_care_animalcategoryToanimalcategory           care[]      @relation("care_animalcategoryToanimalcategory")
+}
+
+model availability {
+  veterinarian_id Int
+  oncall_id       Int
+  remark          String?      @db.VarChar(500)
+  oncall          oncall       @relation(fields: [oncall_id], references: [gard_id], onDelete: Cascade, onUpdate: NoAction)
+  veterinarian    veterinarian @relation(fields: [veterinarian_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([veterinarian_id, oncall_id])
+}
+
+model belonging {
+  animalcategory                                          String         @db.VarChar(30)
+  owner                                                   String         @db.VarChar(255)
+  animalcategory_belonging_animalcategoryToanimalcategory animalcategory @relation("belonging_animalcategoryToanimalcategory", fields: [animalcategory], references: [label_fr], onDelete: Cascade, onUpdate: NoAction)
+  User                                                    User           @relation(fields: [owner], references: [email], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([animalcategory, owner])
+}
+
+model care {
+  animalcategory                                     String         @db.VarChar(30)
+  veterinarian_id                                    Int
+  remark                                             String?        @db.VarChar(500)
+  animalcategory_care_animalcategoryToanimalcategory animalcategory @relation("care_animalcategoryToanimalcategory", fields: [animalcategory], references: [label_fr], onDelete: Cascade, onUpdate: NoAction)
+  veterinarian                                       veterinarian   @relation(fields: [veterinarian_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([animalcategory, veterinarian_id])
+}
+
+model oncall {
+  gard_id       Int            @id @default(autoincrement())
+  date          DateTime       @db.Date
+  isnightoncall Boolean
+  availability  availability[]
+}
+
+model veterinarian {
+  id             Int            @id @default(autoincrement())
+  lastname       String         @db.VarChar(255)
+  firstname      String         @db.VarChar(255)
+  makehomevisits Boolean        @default(false)
+  gsm            String         @db.VarChar(20)
+  streetclinic   String         @db.VarChar(255)
+  numberclinic   String         @db.VarChar(10)
+  localityclinic String         @db.VarChar(255)
+  gpscoordinate  String         @db.VarChar(255)
+  schedule_fr    String         @db.VarChar(500)
+  schedule_en    String         @db.VarChar(500)
+  website        String?        @db.VarChar(255)
+  availability   availability[]
+  care           care[]
+}
